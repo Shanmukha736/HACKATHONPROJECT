@@ -1,168 +1,24 @@
-/* Global Styles */
-.cost {
-  margin-top: 10px;
-  font-weight: 500;
-  color: #1d3557;
-}
-
-.cost span {
-  color: #1e90ff;
-  font-weight: 600;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background-color: #f4f7fb;
-  color: #333;
-}
-
-h1, h2, h3 {
-  color: #1d3557;
-}
-
-a {
-  text-decoration: none;
-}
-
-/* Navbar */
 .navbar {
-  background-color: #1e90ff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 40px;
+  background: var(--primary);
   color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 15px 25px;
 }
 
 .logo {
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
-.links a {
+.nav-links a {
   color: white;
-  margin-left: 25px;
-  font-weight: 500;
-  transition: 0.3s;
+  text-decoration: none;
+  margin: 0 12px;
+  transition: color 0.3s;
 }
 
-.links a:hover {
-  color: #dff0ff;
-}
-
-/* Home Page */
-.hero {
-  text-align: center;
-  margin-top: 80px;
-  background: linear-gradient(to right, #dbeafe, #eff6ff);
-  padding: 60px 20px;
-  border-radius: 10px;
-  max-width: 800px;
-  margin-inline: auto;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-}
-
-.hero h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.hero p {
-  color: #555;
-  margin-bottom: 25px;
-}
-
-.buttons button {
-  margin: 8px;
-  padding: 10px 22px;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-primary {
-  background-color: #1e90ff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #0057b7;
-}
-
-.btn-secondary {
-  background-color: white;
-  color: #1e90ff;
-  border: 1px solid #1e90ff;
-}
-
-.btn-secondary:hover {
-  background-color: #e6f0ff;
-}
-
-/* Ideas Page */
-.ideas {
-  text-align: center;
-  padding: 50px 20px;
-}
-
-.idea-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-  margin-top: 30px;
-}
-
-.idea-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  padding: 20px;
-  width: 220px;
-  transition: 0.3s;
-}
-
-.idea-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-/* Submit Page */
-.submit {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.submit-form {
-  background: white;
-  padding: 30px;
-  margin: 20px auto;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.submit-form input {
-  padding: 10px;
-  border: 1px solid #bbb;
-  border-radius: 6px;
-}
-
-.submit-form button {
-  margin-top: 10px;
-}
-
-/* Footer */
-.footer {
-  text-align: center;
-  background-color: #1e90ff;
-  color: white;
-  padding: 15px;
-  margin-top: 50px;
+.nav-links a:hover {
+  color: var(--accent);
 }

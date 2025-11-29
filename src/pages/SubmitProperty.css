@@ -1,0 +1,39 @@
+.submit {
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.submit h2 {
+  color: #0f766e;
+  margin-bottom: 20px;
+}
+
+.submit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.submit-form input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: #0f766e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #14b8a6;
+}
