@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Auth.css'
 
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn')
-    if (isLoggedIn) {
-      navigate('/home')
-    }
-  }, [])
-
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault()
 
-    const users = JSON.parse(localStorage.getItem('users')) || []
-    const validUser = users.find(
-      (user) => user.email === email && user.password === password
-    )
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const found = users.find((u) => u.email === email && u.password === password)
 
-    if (validUser) {
-      localStorage.setItem('isLoggedIn', 'true')
-      navigate('/home')
-    } else {
-      alert('❌ Invalid email or password')
+    if (!found) {
+      setMessage('❌ Invalid credentials.')
+      return
     }
+
+    localStorage.setItem('isLoggedIn', 'true')
+    localStorage.setItem('role', found.role)
+    localStorage.setItem('email', found.email)
+
+    alert(`✅ Logged in as ${found.role}`)
+    if (found.role === 'admin') navigate('/admin')
+    else navigate('/home')
+
+    window.dispatchEvent(new Event('storage')) // trigger re-render in App.jsx
   }
 
   return (
     <div className="auth-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin} className="auth-form">
         <input
           type="email"
           placeholder="Email"
@@ -48,13 +48,12 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
-        <p>
-          Don’t have an account?{' '}
-          <span onClick={() => navigate('/register')} className="link">
-            Register
-          </span>
+        <button className="auth-button" type="submit">Login</button>
+
+        <p className="auth-switch">
+          Don’t have an account? <span onClick={() => navigate('/register')}>Register</span>
         </p>
+        <p>{message}</p>
       </form>
     </div>
   )

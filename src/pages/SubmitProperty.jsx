@@ -1,28 +1,107 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './SubmitProperty.css'
 
 function SubmitProperty() {
-  const [form, setForm] = useState({ name: '', location: '', budget: '', type: '' })
+  const [propertyType, setPropertyType] = useState('')
+  const [location, setLocation] = useState('')
+  const [budget, setBudget] = useState('')
+  const [details, setDetails] = useState('')
+  const [myRequests, setMyRequests] = useState([])
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const email = localStorage.getItem('email')
+
+  useEffect(() => {
+    const allRequests = JSON.parse(localStorage.getItem('requests') || '[]')
+    const mine = allRequests.filter((r) => r.userEmail === email)
+    setMyRequests(mine)
+  }, [email])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    alert("✅ Property details submitted successfully!")
+
+    const allRequests = JSON.parse(localStorage.getItem('requests') || '[]')
+
+    const newRequest = {
+      id: Date.now(),
+      userEmail: email,
+      propertyType,
+      location,
+      budget,
+      details,
+      status: 'pending',
+      responseTitle: '',
+      responseText: '',
+      respondedBy: ''
+    }
+
+    allRequests.push(newRequest)
+    localStorage.setItem('requests', JSON.stringify(allRequests))
+    setMyRequests(allRequests.filter((r) => r.userEmail === email))
+
+    setPropertyType('')
+    setLocation('')
+    setBudget('')
+    setDetails('')
+
+    alert('✅ Your property request was submitted successfully!')
+    window.dispatchEvent(new Event('storage'))
   }
 
   return (
-    <div className="submit">
-      <h2>🏡 Submit Your Property Details</h2>
-      <form onSubmit={handleSubmit} className="submit-form float">
-        <input name="name" placeholder="Owner Name" onChange={handleChange} required />
-        <input name="location" placeholder="Location" onChange={handleChange} required />
-        <input name="budget" placeholder="Budget (₹)" onChange={handleChange} required />
-        <input name="type" placeholder="Home Type (e.g., Apartment)" onChange={handleChange} required />
-        <button type="submit" className="btn-primary float">Submit</button>
+    <div className="submit-container">
+      <h2>Submit Your Property for Personalized Ideas</h2>
+      <form onSubmit={handleSubmit} className="submit-form">
+        <input
+          type="text"
+          placeholder="Property Type (e.g., 2BHK Flat)"
+          value={propertyType}
+          onChange={(e) => setPropertyType(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Location / City"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Approximate Budget (₹)"
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
+          required
+        />
+        <textarea
+          placeholder="Extra details (e.g., damp walls, small balcony...)"
+          value={details}
+          onChange={(e) => setDetails(e.target.value)}
+          required
+        />
+        <button type="submit">Submit</button>
       </form>
+
+      <h3>Your Requests & Admin Responses</h3>
+      <div className="requests-list">
+        {myRequests.length === 0 && <p>No requests yet.</p>}
+        {myRequests.map((r) => (
+          <div key={r.id} className="request-card">
+            <p><strong>Type:</strong> {r.propertyType}</p>
+            <p><strong>Location:</strong> {r.location}</p>
+            <p><strong>Budget:</strong> ₹{r.budget}</p>
+            <p><strong>Details:</strong> {r.details}</p>
+            <p><strong>Status:</strong> {r.status}</p>
+
+            {r.status === 'responded' && (
+              <div className="response-block">
+                <h4>Admin Suggestion: {r.responseTitle}</h4>
+                <p>{r.responseText}</p>
+                <p className="response-by">By: {r.respondedBy}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

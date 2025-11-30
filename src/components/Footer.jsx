@@ -4,7 +4,7 @@ import './Footer.css'
 function Footer() {
   return (
     <footer className="footer">
-      <p>© {new Date().getFullYear()} ValueAdd Homes | Designed to Add Value</p>
+      <p>© 2025 ValueAdd Homes | Designed to Add Value</p>
     </footer>
   )
 }

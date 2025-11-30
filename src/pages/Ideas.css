@@ -1,83 +1,48 @@
-.ideas {
+.ideas-container {
   text-align: center;
-  padding: 60px 20px;
-  background: linear-gradient(to bottom right, #e0f7fa, #f1f5f9);
+  padding: 40px 20px;
+  background: #ecfeff;
 }
 
-.ideas h2 {
-  font-size: 2.4rem;
+.ideas-container h2 {
   color: #0f766e;
-  margin-bottom: 10px;
-  text-shadow: 0 0 8px rgba(15, 118, 110, 0.4);
 }
 
-.intro {
-  color: #555;
-  margin-bottom: 40px;
-  font-size: 1.05rem;
+.ideas-subtitle {
+  color: #374151;
+  margin-bottom: 20px;
 }
 
-.idea-grid {
+.ideas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  justify-items: center;
+  gap: 20px;
 }
 
 .idea-card {
   background: white;
-  border-radius: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  width: 100%;
-  max-width: 340px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
-.idea-card img {
+.idea-card:hover {
+  transform: translateY(-5px);
+}
+
+.idea-image {
   width: 100%;
-  height: 220px;
+  height: 180px;
   object-fit: cover;
-  border-bottom: 3px solid #14b8a6;
-  transition: transform 0.4s ease, filter 0.4s ease;
 }
 
-.idea-card:hover img {
-  transform: scale(1.05);
-  filter: brightness(1.1) drop-shadow(0 0 10px rgba(20, 184, 166, 0.4));
-}
-
-.idea-info {
-  padding: 20px;
-  flex: 1;
-}
-
-.idea-info h3 {
+.idea-card h3 {
+  margin: 15px 0 5px;
   color: #0f766e;
-  margin-bottom: 10px;
-  font-size: 1.3rem;
 }
 
-.idea-info p {
+.idea-card p {
   color: #374151;
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.cost {
-  margin-top: 12px;
-  font-weight: 500;
-}
-
-.cost span {
-  color: #f97316;
-  font-weight: 600;
-}
-
-@media (max-width: 768px) {
-  .idea-card img {
-    height: 200px;
-  }
+  padding: 0 15px 15px;
 }

@@ -1,8 +1,14 @@
 .footer {
-  background: var(--primary);
-  color: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(90deg, #b3e5fc, #81d4fa); /* same as navbar */
+  color: black;
   text-align: center;
   padding: 12px 0;
-  font-size: 0.9rem;
-  border-top: 2px solid var(--accent);
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
 }

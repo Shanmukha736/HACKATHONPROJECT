@@ -1,39 +1,56 @@
-.submit {
+.submit-container {
+  padding: 40px;
   text-align: center;
-  padding: 50px 20px;
-}
-
-.submit h2 {
-  color: #0f766e;
-  margin-bottom: 20px;
+  background: #f0fdfa;
 }
 
 .submit-form {
+  max-width: 500px;
+  margin: 0 auto 40px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 400px;
-  margin: 0 auto;
+  gap: 12px;
 }
 
-.submit-form input {
-  padding: 12px;
+.submit-form input,
+.submit-form textarea {
+  padding: 10px;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
-  border: 1px solid #ccc;
   font-size: 1rem;
 }
 
-.btn-primary {
+.submit-form button {
   background: #0f766e;
   color: white;
   border: none;
+  padding: 10px;
   border-radius: 8px;
-  padding: 12px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.btn-primary:hover {
+.submit-form button:hover {
   background: #14b8a6;
+}
+
+.requests-title {
+  margin-top: 30px;
+  color: #0f766e;
+}
+
+.request-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 15px auto;
+  padding: 15px;
+  max-width: 500px;
+  text-align: left;
+}
+
+.response-block {
+  background: #ecfeff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
 }
