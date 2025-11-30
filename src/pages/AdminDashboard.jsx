@@ -8,20 +8,20 @@ function AdminDashboard() {
   const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [editingId, setEditingId] = useState(null)
-
   const adminEmail = localStorage.getItem('email')
 
   useEffect(() => {
-    const loadData = () => {
+    const refreshData = () => {
       const storedIdeas = JSON.parse(localStorage.getItem('ideas') || '[]')
       const storedRequests = JSON.parse(localStorage.getItem('requests') || '[]')
       setIdeas(storedIdeas)
       setRequests(storedRequests)
     }
 
-    loadData()
-    window.addEventListener('storage', loadData)
-    return () => window.removeEventListener('storage', loadData)
+    refreshData()
+    window.addEventListener('storage', refreshData)
+
+    return () => window.removeEventListener('storage', refreshData)
   }, [])
 
   const saveIdeas = (list) => {
@@ -77,9 +77,9 @@ function AdminDashboard() {
   }
 
   const handleRespond = (id) => {
-    const title = prompt('Enter suggestion title:')
+    const title = prompt('Enter idea title:')
     if (!title) return
-    const text = prompt('Enter detailed suggestion:')
+    const text = prompt('Enter your suggestion:')
     if (!text) return
 
     const updatedRequests = requests.map((req) =>
@@ -118,7 +118,7 @@ function AdminDashboard() {
             onChange={(e) => setImageUrl(e.target.value)}
           />
           <textarea
-            placeholder="Idea Description"
+            placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />

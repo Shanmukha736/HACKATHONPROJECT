@@ -11,9 +11,17 @@ function SubmitProperty() {
   const email = localStorage.getItem('email')
 
   useEffect(() => {
-    const allRequests = JSON.parse(localStorage.getItem('requests') || '[]')
-    const mine = allRequests.filter((r) => r.userEmail === email)
-    setMyRequests(mine)
+    // Always reload requests from global storage
+    const refreshRequests = () => {
+      const allRequests = JSON.parse(localStorage.getItem('requests') || '[]')
+      const mine = allRequests.filter((r) => r.userEmail === email)
+      setMyRequests(mine)
+    }
+
+    refreshRequests()
+    window.addEventListener('storage', refreshRequests)
+
+    return () => window.removeEventListener('storage', refreshRequests)
   }, [email])
 
   const handleSubmit = (e) => {
@@ -34,17 +42,19 @@ function SubmitProperty() {
       respondedBy: ''
     }
 
-    allRequests.push(newRequest)
-    localStorage.setItem('requests', JSON.stringify(allRequests))
-    setMyRequests(allRequests.filter((r) => r.userEmail === email))
+    const updated = [...allRequests, newRequest]
+    localStorage.setItem('requests', JSON.stringify(updated))
+    setMyRequests(updated.filter((r) => r.userEmail === email))
+
+    // notify other tabs (admin) to refresh
+    window.dispatchEvent(new Event('storage'))
 
     setPropertyType('')
     setLocation('')
     setBudget('')
     setDetails('')
 
-    alert('✅ Your property request was submitted successfully!')
-    window.dispatchEvent(new Event('storage'))
+    alert('✅ Your request has been submitted to admin!')
   }
 
   return (
@@ -67,23 +77,23 @@ function SubmitProperty() {
         />
         <input
           type="number"
-          placeholder="Approximate Budget (₹)"
+          placeholder="Budget (₹)"
           value={budget}
           onChange={(e) => setBudget(e.target.value)}
           required
         />
         <textarea
-          placeholder="Extra details (e.g., damp walls, small balcony...)"
+          placeholder="Describe problems or improvements (e.g., damp walls, small balcony...)"
           value={details}
           onChange={(e) => setDetails(e.target.value)}
           required
         />
-        <button type="submit">Submit</button>
+        <button type="submit">Submit Property</button>
       </form>
 
-      <h3>Your Requests & Admin Responses</h3>
+      <h3>Your Submitted Requests</h3>
       <div className="requests-list">
-        {myRequests.length === 0 && <p>No requests yet.</p>}
+        {myRequests.length === 0 && <p>No requests submitted yet.</p>}
         {myRequests.map((r) => (
           <div key={r.id} className="request-card">
             <p><strong>Type:</strong> {r.propertyType}</p>

@@ -1,33 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Auth.css'
 
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
+  const [captcha, setCaptcha] = useState('')
+  const [userInput, setUserInput] = useState('')
   const navigate = useNavigate()
 
-  const handleLogin = (e) => {
+  const generateCaptcha = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+    let text = ''
+    for (let i = 0; i < 6; i++) text += chars.charAt(Math.floor(Math.random() * chars.length))
+    setCaptcha(text)
+  }
+
+  useEffect(() => {
+    generateCaptcha()
+  }, [])
+
+  const handleLogin = async (e) => {
     e.preventDefault()
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]')
-    const found = users.find((u) => u.email === email && u.password === password)
-
-    if (!found) {
-      setMessage('❌ Invalid credentials.')
+    if (userInput.trim().toUpperCase() !== captcha.trim().toUpperCase()) {
+      alert('❌ CAPTCHA incorrect. Please try again.')
+      generateCaptcha()
       return
     }
 
-    localStorage.setItem('isLoggedIn', 'true')
-    localStorage.setItem('role', found.role)
-    localStorage.setItem('email', found.email)
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
 
-    alert(`✅ Logged in as ${found.role}`)
-    if (found.role === 'admin') navigate('/admin')
-    else navigate('/home')
+      if (res.ok) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('role', data.role)
+        localStorage.setItem('isLoggedIn', 'true')
+        localStorage.setItem('email', email)
 
-    window.dispatchEvent(new Event('storage')) // trigger re-render in App.jsx
+        alert(`✅ Logged in as ${data.role}`)
+        navigate(data.role === 'admin' ? '/admin' : '/home')
+      } else {
+        alert(`❌ ${data.message}`)
+      }
+    } catch (err) {
+      alert('⚠️ Unable to connect to server')
+    }
   }
 
   return (
@@ -48,12 +71,24 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
+        <div className="captcha-box">
+          <div className="captcha-display">{captcha}</div>
+          <button type="button" onClick={generateCaptcha} className="reload-btn">↻</button>
+        </div>
+        <input
+          type="text"
+          placeholder="Enter CAPTCHA"
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          required
+        />
+
         <button className="auth-button" type="submit">Login</button>
 
         <p className="auth-switch">
           Don’t have an account? <span onClick={() => navigate('/register')}>Register</span>
         </p>
-        <p>{message}</p>
       </form>
     </div>
   )

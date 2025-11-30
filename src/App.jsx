@@ -23,15 +23,18 @@ function ScrollControl() {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
 
   useEffect(() => {
-    window.history.pushState(null, null, window.location.href)
+    // Prevent going back to login/register after login
+    window.history.pushState(null, '', window.location.href)
     window.onpopstate = () => {
-      if (!isLoggedIn) navigate('/login')
-      else if (location.pathname === '/login' || location.pathname === '/register') {
+      if (!isLoggedIn) {
+        navigate('/login')
+      } else if (location.pathname === '/login' || location.pathname === '/register') {
         const role = localStorage.getItem('role')
         navigate(role === 'admin' ? '/admin' : '/home')
       }
     }
 
+    // Prevent using forward button after logout
     window.onbeforeunload = () => {
       if (!isLoggedIn) localStorage.removeItem('preventForward')
       else localStorage.setItem('preventForward', 'true')
@@ -49,7 +52,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true')
   const [role, setRole] = useState(localStorage.getItem('role'))
 
-  // Re-render when login/logout occurs
+  // Sync across tabs and reactively update when login/logout happens
   useEffect(() => {
     const handleStorageChange = () => {
       setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true')
@@ -67,7 +70,10 @@ function App() {
         <Navbar />
         <main className="content">
           <Routes>
+            {/* Default route */}
             <Route path="/" element={<Navigate to="/register" replace />} />
+
+            {/* Auth routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
@@ -75,31 +81,25 @@ function App() {
             <Route
               path="/home"
               element={
-                isLoggedIn && role === 'user' ? (
-                  <Home />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                isLoggedIn && role === 'user'
+                  ? <Home />
+                  : <Navigate to="/login" replace />
               }
             />
             <Route
               path="/ideas"
               element={
-                isLoggedIn && role === 'user' ? (
-                  <Ideas />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                isLoggedIn && role === 'user'
+                  ? <Ideas />
+                  : <Navigate to="/login" replace />
               }
             />
             <Route
               path="/submit"
               element={
-                isLoggedIn && role === 'user' ? (
-                  <SubmitProperty />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                isLoggedIn && role === 'user'
+                  ? <SubmitProperty />
+                  : <Navigate to="/login" replace />
               }
             />
 
@@ -107,17 +107,18 @@ function App() {
             <Route
               path="/admin"
               element={
-                isLoggedIn && role === 'admin' ? (
-                  <AdminDashboard />
-                ) : (
-                  <Navigate to="/login" replace />
-                )
+                isLoggedIn && role === 'admin'
+                  ? <AdminDashboard />
+                  : <Navigate to="/login" replace />
               }
             />
 
+            {/* Catch-all route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+
+        {/* Footer visible only after login */}
         {isLoggedIn && <Footer />}
       </div>
     </Router>
